@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+  api:
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 80:3000
+    command: npm run start:dev
+    networks:
+      - webnet
+    depends_on:
+      - postgres.db
+  postgres.db:
+    image: postgres:13
+    networks:
+      - webnet
+    environment:
+      - POSTGRES_USER=mendoanjoe
+      - POSTGRES_PASSWORD=hhZifk3@#O6l
+      - POSTGRES_DB=node_test
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  adminer.web:
+    image: adminer
+    restart: always
+    networks:
+      - webnet
+    ports:
+      - 1945:8080
+    depends_on:
+      - postgres.db
+networks:
+  webnet:
+volumes:
+  pgdata:
