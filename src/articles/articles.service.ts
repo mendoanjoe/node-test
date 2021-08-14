@@ -1,7 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
+import { SearchArticleDto } from './dto/search-article.dto';
 import { Article } from './entities/article.entity';
 
 @Injectable()
@@ -15,8 +16,25 @@ export class ArticlesService {
     return this.articlesRepository.save(createArticleDto)
   }
 
-  findAll(): Promise<Article[]> {
-    return this.articlesRepository.find();
+  findAll(query: SearchArticleDto): Promise<Article[]> {
+    if (typeof query.query === 'undefined') {
+      query.query = '';
+    }
+
+    if (typeof query.author === 'undefined') {
+      query.author = '';
+    }
+
+    return this.articlesRepository.find({
+      order: {
+        id: "DESC",
+      },
+      where: {
+        title: Like(`%${query.query}%`),
+        body: Like(`%${query.query}%`),
+        author: Like(`%${query.author}%`),
+      }
+    });
   }
 
   findOne(id: string): Promise<Article> {
