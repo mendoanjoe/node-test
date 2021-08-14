@@ -24,3 +24,9 @@ docker compose up -d
 | `GET` http://localhost/articles/{id}  | Get article by id |
 | `PATCH` http://localhost/articles/{id}  | Patch article by id |
 | `DELETE` http://localhost/articles/{id}  | delete article by id |
+
+## Search
+`GET` http://localhost/articles
+with query search
+- query: search column `title` and `body`
+- author: search column `author`
