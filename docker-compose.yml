@@ -15,6 +15,10 @@ services:
       - webnet
     depends_on:
       - postgres.db
+  redis.cache:
+    image: "redis:alpine"
+    networks:
+      - webnet
   postgres.db:
     image: postgres:13
     networks:
